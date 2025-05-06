@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Personal Finance Visualizer - Stage 1
+This simple web application helps users track their personal finances by allowing them to add, edit, and delete transactions, while visualizing their monthly expenses in a bar chart.
 
-## Getting Started
+Stack
+Frontend:
 
-First, run the development server:
+Next.js: Framework for building the React app.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+React: For managing the UI.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+shadcn/ui: A UI library for building beautiful components with ease.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Recharts: For rendering the monthly expenses bar chart.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Backend:
 
-## Learn More
+MongoDB: For storing transactions data.
 
-To learn more about Next.js, take a look at the following resources:
+Styling:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+TailwindCSS for a responsive design.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Features in Stage 1
+Add Transactions: Users can add transactions with amount, date, and description.
 
-## Deploy on Vercel
+Edit Transactions: Users can modify the details of an existing transaction.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Delete Transactions: Users can remove unwanted transactions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Transaction List View: A list displaying all the transactions added by the user.
+
+Monthly Expenses Chart: A bar chart showing the total expenses for each month.
+
+Basic Form Validation: Ensures that all form fields (amount, date, description) are filled before submission.
+
