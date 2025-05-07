@@ -1,12 +1,11 @@
 'use client';
 
-
-
 interface Transaction {
   _id: string;
   amount: number;
   date: string;
   description: string;
+  category: string; 
 }
 
 interface Props {
@@ -14,17 +13,17 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-export default function TransactionList({ transactions, onDelete }: Props) {
+const TransactionList = ({ transactions, onDelete }: Props) => {
   return (
     <div className="mt-10 space-y-4">
-      {transactions.map((txn) => (
+      {transactions.map((txn, index) => (
         <div
-          key={txn._id}
+          key={txn._id || index} // Fallback to index if _id is missing or non-unique
           className="flex items-start justify-between gap-4 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-4"
         >
           <div className="flex-1">
             <p className="text-xl font-bold text-gray-800 mb-1">
-              ₹{txn.amount.toFixed(2)}
+              ₹{txn.amount && !isNaN(txn.amount) ? txn.amount.toFixed(2) : "0.00"}
             </p>
             <p className="text-sm text-muted-foreground">
               {new Date(txn.date).toLocaleDateString("en-IN", {
@@ -35,6 +34,9 @@ export default function TransactionList({ transactions, onDelete }: Props) {
             </p>
             <p className="text-sm text-gray-700 mt-2 break-words">
               {txn.description}
+            </p>
+            <p className="text-sm text-gray-500 mt-1 italic">
+              Category: {txn.category}
             </p>
           </div>
           <div className="flex gap-2">
@@ -49,4 +51,6 @@ export default function TransactionList({ transactions, onDelete }: Props) {
       ))}
     </div>
   );
-}
+};
+
+export default TransactionList;
