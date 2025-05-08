@@ -33,3 +33,19 @@ Monthly Expenses Chart: A bar chart showing the total expenses for each month.
 
 Basic Form Validation: Ensures that all form fields (amount, date, description) are filled before submission.
 
+🔄 Stage 2 Additions
+🗂️ Predefined Categories
+Users can assign categories like Food, Transport, Shopping, Bills, etc. to each transaction.
+
+📊 Category-wise Pie Chart
+Visualize spending by category using a pie chart.
+
+Highlights proportional breakdown of expenses.
+
+📋 Dashboard Summary
+Total Expenses: Sum of all transaction amounts.
+
+Category Breakdown: Text summary of category totals.
+
+Recent Transactions: Display of latest 5–10 transactions for quick reference.
+
