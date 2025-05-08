@@ -7,28 +7,23 @@ import DashboardSummary from "@/components/DashboardSummary";
 import { groupByMonth } from "@/utils/groupByMonth";
 import { getCategoryPieData } from "@/utils/categoryData";
 import { Transaction } from "@/types/Transaction";
+import { Budget } from "@/types/Budget"; // ✅ Import the Budget type
 
 export default function HomePage() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]); // Ensure it’s always an array
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [budgets, setBudgets] = useState<Budget[]>([]); // ✅ Strongly typed
   const [loading, setLoading] = useState(true);
 
-  // Fetch transactions on mount
+  // Fetch transactions
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch("/api/transactions");
         const data = await res.json();
-
-        // Ensure the data is an array before setting the state
-        if (Array.isArray(data)) {
-          setTransactions(data);
-        } else {
-          console.error("Expected an array but received:", data);
-          setTransactions([]); // Set an empty array if data is not valid
-        }
+        setTransactions(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch transactions", err);
-        setTransactions([]); // Set empty array if fetch fails
+        setTransactions([]);
       } finally {
         setLoading(false);
       }
@@ -37,7 +32,16 @@ export default function HomePage() {
     fetchData();
   }, []);
 
-  // Add a new transaction
+  // Fetch budgets
+  useEffect(() => {
+    const fetchBudgets = async () => {
+      const res = await fetch("/api/budgets");
+      const data = await res.json();
+      setBudgets(data);
+    };
+    fetchBudgets();
+  }, []);
+
   const addTransaction = async (txn: Omit<Transaction, "_id">) => {
     const res = await fetch("/api/transactions", {
       method: "POST",
@@ -48,13 +52,11 @@ export default function HomePage() {
     setTransactions([newTxn, ...transactions]);
   };
 
-  // Delete a transaction
   const deleteTransaction = async (id: string) => {
     await fetch(`/api/transactions/${id}`, { method: "DELETE" });
     setTransactions(transactions.filter((txn) => txn._id !== id));
   };
 
-  // Ensure transactions is valid before calling groupByMonth
   const monthlyChartData = groupByMonth(transactions);
   const pieChartData = getCategoryPieData(transactions);
 
@@ -72,6 +74,31 @@ export default function HomePage() {
           <CategoryPieChart data={pieChartData} />
           <MonthlyChart data={monthlyChartData} />
           <TransactionList transactions={transactions} onDelete={deleteTransaction} />
+
+          {/* ✅ Spending Insights Section */}
+          <div className="mt-8">
+            <h2 className="text-lg font-semibold">💡 Spending Insights</h2>
+            <ul className="list-disc ml-5 mt-2">
+              {budgets.map((b, index) => {
+                const actual = transactions
+                  .filter(
+                    (txn) =>
+                      txn.category === b.category &&
+                      txn.date.startsWith(b.month)
+                  )
+                  .reduce((sum, txn) => sum + txn.amount, 0);
+
+                const status = actual > b.amount ? "❌ Over budget" : "✅ On track";
+
+                return (
+                  <li key={`${b.month}-${b.category}-${index}`}> {/* Added index to key for uniqueness */}
+                    {b.category} ({b.month}): Spent ₹{actual.toFixed(2)} / ₹
+                    {b.amount} – <strong>{status}</strong>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </>
       )}
     </div>

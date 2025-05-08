@@ -1,4 +1,3 @@
-// components/DashboardSummary.tsx
 import { Transaction } from "@/types/Transaction";
 
 export default function DashboardSummary({ transactions }: { transactions: Transaction[] }) {
@@ -15,8 +14,8 @@ export default function DashboardSummary({ transactions }: { transactions: Trans
       <div className="bg-white shadow rounded-xl p-4 col-span-2">
         <h3 className="text-sm text-gray-500 mb-2">Recent Transactions</h3>
         <ul className="text-sm text-gray-700 space-y-1">
-          {latest.map((txn) => (
-            <li key={txn._id}>
+          {latest.map((txn, index) => (
+            <li key={txn._id || `${txn.category}-${txn.date}-${index}`}> {/* Fallback key using category, date, and index */}
               ₹{txn.amount} – {txn.description} ({txn.category})
             </li>
           ))}

@@ -1,24 +1,19 @@
 'use client';
 
-interface Transaction {
-  _id: string;
-  amount: number;
-  date: string;
-  description: string;
-  category: string; 
-}
+import { Transaction } from '@/types/Transaction';
 
 interface Props {
   transactions: Transaction[];
   onDelete: (id: string) => void;
 }
 
-const TransactionList = ({ transactions, onDelete }: Props) => {
+export default function TransactionList({ transactions, onDelete }: Props) {
   return (
     <div className="mt-10 space-y-4">
-      {transactions.map((txn, index) => (
+      <h2 className="text-lg font-semibold mb-2">📜 Transactions</h2>
+      {transactions.map((txn) => (
         <div
-          key={txn._id || index} // Fallback to index if _id is missing or non-unique
+          key={txn._id || txn.date + txn.category} // Ensure the key is unique (fallback if _id is missing)
           className="flex items-start justify-between gap-4 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-4"
         >
           <div className="flex-1">
@@ -51,6 +46,4 @@ const TransactionList = ({ transactions, onDelete }: Props) => {
       ))}
     </div>
   );
-};
-
-export default TransactionList;
+}
